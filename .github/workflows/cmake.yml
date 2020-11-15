@@ -21,6 +21,21 @@ jobs:
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
       run: cmake -E make_directory ${{runner.workspace}}/build
+      
+    - name: Clone Catch2
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: git clone https://github.com/catchorg/Catch2.git  
+    
+    - name: Cmake Catch2
+      shell: bash
+      working-directory: ${{runner.workspace}}/build/Catch2
+      run: cmake -Bbuild -H. -DBUILD_TESTING=OFF
+      
+    - name: Install Catch2
+      shell: bash
+      working-directory: ${{runner.workspace}}/build/Catch2
+      run: sudo cmake --build build/ --target install
 
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
